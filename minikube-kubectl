@@ -1,0 +1,14 @@
+What is minikube:
+
+Prod:
+  2x Master nodes
+  3+ Worker nodes
+
+Local machine deployments are good environments for minikube
+  - single-node cluster with master and worker processes are co-located\
+  - typically setup in VirtualBox
+  - requires virtualization environment
+
+Kubectl:
+
+command-line tool for K8s

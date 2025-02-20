@@ -1,0 +1,56 @@
+Official Definition:
+
+Open Source conttainer orchestration tool
+Developed by Google
+
+Assists with managing containerized apps in different deployment environments
+
+Kubernetes solves the following problems:
+
+Apps migrated from Monolithic architectures to Microservices, leading to increased
+usage of Containers and leading to a demand for a proper way of managing those
+hundreds of containers
+
+Orchestration tools offer the following features:
+  High Availability or no downtime
+  Scalability
+  Disaster Recovery
+
+Components:
+
+Node and Pod:
+  Node: server
+  Pod: Smallest unit of K8s, abstraction over container, usually 1 app per pod
+
+You only interact with the K8s layer, not the docker containers
+
+Each Pod has its own IP and they can communicate between each other
+
+Pods are EPHEMERAL, resulting in a new IP
+
+Services are used to create a static IP and/or DNS name for each app
+Lifecycles of Pods and Services are disconnected
+
+Services are split between Internal and External
+
+Ingress is used to assign a Domain Name and route to the Service
+
+ConfigMap:
+  externalizes configuration of your app, allowing the pod to be reconfigured
+  without redeploying the pod
+  NOTE: putting creds in ConfigMap is a BAD idea, use Secret instead
+
+Secret: used to store secret data
+  base64 encoded
+
+Volumes: persistent data storage for pods
+    local or remote
+    K8s doesnt natively manage data persistence
+
+Deployments:
+  blueprint for your app Definition
+  abstracts the pods
+
+Stateful Deployments (DBs, etc) are offered by StatefulSet
+  Not easy
+  DBs are often hosted OUTSIDE of K8s cluster
