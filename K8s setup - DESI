@@ -1,0 +1,44 @@
+mdhnaplapp7005 - master
+  mdhnaplapp7006 - worker 1
+  mdhnaplapp7007 - worker 2
+
+
+
+swapoff -a
+lvremove /dev/mapper/rhel_rhel9-swap
+
+edit fstab to comment out swap
+
+sudo setenforce 0
+sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+
+cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.32/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.32/rpm/repodata/repomd.xml.key
+exclude=kubelet kubeadm kubectl cri-tools kubernetes-cni
+EOF
+
+sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+sudo systemctl enable --now kubelet
+
+yum install containerd
+## Make sure that cri is not included in thedisabled_plugins list within /etc/containerd/config.toml; if you made changes to that file,
+## also restart containerd.
+/etc/containerd/config.toml:
+comment out cri in disabled_plugins list,
+add:
+[plugins."io.containerd.grpc.v1.cri"]
+  sandbox_image = "registry.k8s.io/pause:3.10"
+
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+
+kubeadm join 10.77.156.167:6443 --token n0yg4k.k22d6cnxcfquwk7l \
+	--discovery-token-ca-cert-hash sha256:cc16c9af58c25684c1ed53e0fb2b7853d0537de226bea9d7baed5b0a841985ec

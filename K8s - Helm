@@ -1,0 +1,55 @@
+Features:
+  Package Manager for Kubernetes
+    Collections of YAML files
+    Create your own Helm Charts with Helm
+    Push to Helm repo
+    Download and use existing ones
+
+  Quick deploy option to deploy standard apps
+
+  Private registries also exist
+
+  Templating Engine
+    allows you to create a common blueprint and replace dynamic values within
+    the yaml with placeholders
+    {{ .Values.container.name}}
+
+  Effective for multi-platform environment clusters
+
+
+typical Structure:
+
+mychart /  < - Chart name
+  Chart.Yaml  < - meta info about chart (name, version, dependencies, etc)
+  values.yaml < - default values for template files
+  charts/ < - chart dependencies
+  templates/ < - storage for template files
+
+Value injection into template files:
+
+values.yaml:
+imageName: myapp
+port: 8080
+version: 1.0.0
+
+my-values.yaml:
+version 2.0.0
+
+resulting yaml set:
+imageName: myapp
+port: 8080
+version: 2.0.0
+
+you can also use --set to define the values at runtime
+
+Release Management:
+
+v2: two parts: client (helm CLI)/server (Tiller)
+  Tiller provides a record of all chart executions, and applies the changes
+  to the existing deployment, instead of creating a new one
+
+  also provides rollback functionality
+
+  Downside: Tiller has too much power inside of K8s cluster, resulting in
+  security issues
+v3: DOES NOT INCLUDE TILLER

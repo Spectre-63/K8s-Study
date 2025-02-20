@@ -1,0 +1,8 @@
+# Install hypervisor - Hyperkit is deprecated
+
+brew install qemu
+
+brew install Minikube
+
+
+minikube start --vm-driver=qemu
