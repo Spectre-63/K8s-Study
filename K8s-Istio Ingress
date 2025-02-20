@@ -1,0 +1,10 @@
+curl -L https://istio.io/downloadIstio | sh -
+
+istioctl install --set profile=default -y
+
+kubectl create ns istio
+
+kubectl label namespace istio istio-injection=enabled
+
+
+kubectl get pods -n istio
